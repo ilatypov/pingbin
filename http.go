@@ -22,6 +22,9 @@ func generateToken() string {
 var historyPathRe = regexp.MustCompile(`^/([a-fA-F0-9]{28})/history$`)
 var tokenPathRe = regexp.MustCompile(`^/([a-fA-F0-9]{28})$`)
 var pathPingRe = regexp.MustCompile(`^/p/([a-fA-F0-9]{28})(/|$)`)
+var acmeLocation = "/.well-known/acme-challenge/"
+var acmeRe = regexp.MustCompile(`^` + regexp.QuoteMeta(acmeLocation) + `([a-zA-Z0-9_-]+)$`)
+var levar = "/var/lib/letsencrypt"
 
 func Http(listen string, httpHost string) (<-chan Record, error) {
 	ret := make(chan Record)
@@ -135,6 +138,20 @@ func Http(listen string, httpHost string) (<-chan Record, error) {
 			log.Println(err)
 		}
 	})
+	http.HandleFunc(acmeLocation, func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("%s %s %s", r.RemoteAddr, r.Method, r.URL)
+		path := r.URL.Path
+        acmeMatches := acmeRe.FindStringSubmatch(path)
+        if len(acmeMatches) == 2 {
+            // The following reads from /var/lib/letsencrypt/.well-known/acme-challenge/NNN,
+            // assuming that certbot runs as follows and levar has the same value as webroot-path.
+            //  certbot --webroot --webroot-path /var/lib/letsencrypt
+            fpath := levar + path
+            http.ServeFile(w, r, fpath)
+        } else {
+            http.Error(w, "unexpected ACME location format", 404)
+        }
+    })
 	go func() {
 		go sockio.Serve()
 		defer sockio.Close()

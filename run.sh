@@ -29,5 +29,7 @@ echo "Listening on tcp port ${ipaddr}:${httpport}, as well as to \"${filter}\" o
 # # a2enmod proxy proxy_http
 # ProxyPassMatch "^/(|[0-9a-f]{28}|socket.io/.*|p/[0-9a-f]{28})$" "http://HTTPHOST/$1" upgrade=websocket
 
-docker run -it --read-only --rm --network=host pingbin "${ipaddr}:${httpport}" "${iface}" "${httphost}"
+docker run -it --read-only --rm --network=host \
+    --mount type=bind,readonly,src=/var/lib/letsencrypt,dst=/var/lib/letsencrypt \
+    pingbin "${ipaddr}:${httpport}" "${iface}" "${httphost}"
 
