@@ -3,7 +3,7 @@
 # ARG IFACE="eth0"
 # ARG HTTPHOST="pingb.in"
 
-FROM golang:1.22
+FROM golang:1.26.3
 
 # ARG IPADDR
 # ARG HTTPPORT
