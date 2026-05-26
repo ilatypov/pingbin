@@ -27,7 +27,7 @@ echo "Listening on tcp port ${ipaddr}:${httpport}, as well as to \"${filter}\" o
 # # No need in mod_proxy_wstunnel since 2.4.47.
 # # https://httpd.apache.org/docs/2.4/mod/mod_proxy.html#wsupgrade
 # # a2enmod proxy proxy_http
-# ProxyPassMatch "^/(|[0-9a-f]{28}|socket.io/.*|p/[0-9a-f]{28})$" "http://HTTPHOST/$1" upgrade=websocket
+# ProxyPassMatch "^/(|[0-9a-f]{28}|socket\.io|p/[0-9a-f]{28}|p[0-9a-f]{28})(/.*|$)" "http://localhost/$1$2" upgrade=websocket
 
 docker run -it --read-only --rm --network=host \
     --mount type=bind,readonly,src=/var/lib/letsencrypt,dst=/var/lib/letsencrypt \
